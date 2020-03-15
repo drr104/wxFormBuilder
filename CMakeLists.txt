@@ -1,7 +1,7 @@
 project(wxFormBuilder)
 cmake_minimum_required(VERSION 3.0)
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/CMakeModules)
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 
 find_package(wxWidgets 3.0.0 COMPONENTS gl aui adv html core net base xml stc richtext propgrid ribbon xrc REQUIRED)
 include(${wxWidgets_USE_FILE})

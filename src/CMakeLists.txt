@@ -87,9 +87,9 @@ if(APPLE)
         )
 else()
     add_custom_command(TARGET wxFormBuilder POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/resources
+        COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/output/resources
         ${CMAKE_CURRENT_BINARY_DIR}/${INSTALL_SHARE_DIR}/resources
-        COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/xml
+        COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/output/xml
         ${CMAKE_CURRENT_BINARY_DIR}/${INSTALL_SHARE_DIR}/xml
     )
 endif()
@@ -183,7 +183,7 @@ if(APPLE)
     " ${COMPONENT})
 else()
     install(DIRECTORY
-        ${CMAKE_SOURCE_DIR}/xml 
-        ${CMAKE_SOURCE_DIR}/resources
+        ${CMAKE_SOURCE_DIR}/output/xml 
+        ${CMAKE_SOURCE_DIR}/output/resources
         DESTINATION ${INSTALL_SHARE_DIR})
 endif()
