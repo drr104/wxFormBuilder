@@ -2,40 +2,39 @@ set(wxFB_SRCS
     maingui.cpp
     md5/md5.cc
     dbg_stack_trace/stack.cpp
-    rad/wxfbmanager.cpp
-    rad/bitmaps.cpp
-    rad/customkeys.cpp
-    rad/xrcpanel/xrcpanel.cpp
-    rad/pythonpanel/pythonpanel.cpp
-    rad/palette.cpp
-    rad/xrcpreview/xrcpreview.cpp
-    rad/codeeditor/codeeditor.cpp
-    rad/dataobject/dataobject.cpp
-    rad/appdata.cpp
-    rad/cpppanel/cpppanel.cpp
-    rad/title.cpp
-    rad/menueditor.cpp
     rad/about.cpp
-    rad/mainframe.cpp
-    rad/objecttree/objecttree.cpp
-    rad/geninheritclass/geninhertclass.cpp
-    rad/geninheritclass/geninhertclass_gui.cpp
-    rad/genericpanel.cpp
-    rad/phppanel/phppanel.cpp
-    rad/wxfbevent.cpp
+    rad/appdata.cpp
+    rad/bitmaps.cpp
     rad/cmdproc.cpp
-    rad/inspector/wxfbadvprops.cpp
-    rad/inspector/objinspect.cpp
+    rad/customkeys.cpp
+    rad/genericpanel.cpp
+    rad/mainframe.cpp
+    rad/menueditor.cpp
+    rad/palette.cpp
+    rad/title.cpp
+    rad/wxfbevent.cpp
+    rad/wxfbmanager.cpp
+    rad/codeeditor/codeeditor.cpp
+    rad/cpppanel/cpppanel.cpp
+    rad/dataobject/dataobject.cpp
+    rad/designer/innerframe.cpp
+    rad/designer/menubar.cpp
     rad/designer/resizablepanel.cpp
     rad/designer/visualeditor.cpp
-    rad/designer/innerframe.cpp
     rad/designer/visualobj.cpp
-    rad/designer/menubar.cpp
+    rad/geninheritclass/geninhertclass.cpp
+    rad/geninheritclass/geninhertclass_gui.cpp
+    rad/inspector/objinspect.cpp
+    rad/inspector/wxfbadvprops.cpp
     rad/luapanel/luapanel.cpp
+    rad/objecttree/objecttree.cpp
+    rad/phppanel/phppanel.cpp
+    rad/pythonpanel/pythonpanel.cpp
+    rad/xrcpanel/xrcpanel.cpp
+    rad/xrcpreview/xrcpreview.cpp
     utils/filetocarray.cpp
     utils/annoyingdialog.cpp
     utils/stringutils.cpp
-    utils/encodingutils.cpp
     utils/wxfbipc.cpp
     utils/typeconv.cpp
     codegen/phpcg.cpp

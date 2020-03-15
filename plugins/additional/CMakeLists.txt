@@ -1,1 +1,1 @@
-add_wxformbuilder_plugin_target(additional additional.cpp)
+add_library(additional additional.cpp)

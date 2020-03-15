@@ -1,1 +1,1 @@
-add_wxformbuilder_plugin_target(common common.cpp)
+add_library(common common.cpp)

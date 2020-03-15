@@ -1,1 +1,1 @@
-add_wxformbuilder_plugin_target(layout layout.cpp)
+add_library(layout layout.cpp)

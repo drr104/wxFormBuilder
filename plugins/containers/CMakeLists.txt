@@ -1,1 +1,1 @@
-add_wxformbuilder_plugin_target(containers containers.cpp)
+add_library(containers containers.cpp)
