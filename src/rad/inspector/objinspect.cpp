@@ -527,20 +527,23 @@ void ObjectInspector::AddItems( const wxString& name, PObjectBase obj,
 			if (m_style != wxFB_OI_MULTIPAGE_STYLE)
 			{
 				// Most common classes will be showed with a slightly different colour.
-				if (name == wxT("wxWindow"))
+				if (!AppData()->IsDarkMode())
 				{
-					m_pg->SetPropertyBackgroundColour(id,wxColour(255,255,205)); // yellow
-					m_pg->SetPropertyTextColour(id, *wxBLACK); //in case of a dark theme
+					if (name == wxT("wxWindow"))
+						m_pg->SetPropertyBackgroundColour(id,wxColour(255,255,205)); // yellow
+					else if (name == wxT("AUI"))
+						m_pg->SetPropertyBackgroundColour(id,wxColour(240,240,255)); // light blue
+					else if (name == wxT("sizeritem") || name == wxT("gbsizeritem") || name == wxT("sizeritembase"))
+						m_pg->SetPropertyBackgroundColour(id,wxColour(220,255,255)); // cyan
 				}
-				else if (name == wxT("AUI"))
+				else
 				{
-					m_pg->SetPropertyBackgroundColour(id,wxColour(240,240,255)); // light blue
-					m_pg->SetPropertyTextColour(id, *wxBLACK); //in case of a dark theme
-				}
-				else if (name == wxT("sizeritem") || name == wxT("gbsizeritem") || name == wxT("sizeritembase") )
-				{
-					m_pg->SetPropertyBackgroundColour(id,wxColour(220,255,255)); // cyan
-					m_pg->SetPropertyTextColour(id, *wxBLACK); //in case of a dark theme
+					if (name == wxT("wxWindow"))
+						m_pg->SetPropertyBackgroundColour(id,wxColour(127,127,51)); // dark yellow
+					else if (name == wxT("AUI"))
+						m_pg->SetPropertyBackgroundColour(id,wxColour(76,76,153)); // dark blue
+					else if (name == wxT("sizeritem") || name == wxT("gbsizeritem") || name == wxT("sizeritembase"))
+						m_pg->SetPropertyBackgroundColour(id,wxColour(51,127,127)); // dark cyan
 				}
 			}
 
@@ -614,20 +617,23 @@ void ObjectInspector::AddItems( const wxString& name, PObjectBase obj,
 			if (m_style != wxFB_OI_MULTIPAGE_STYLE)
 			{
 				// Most common classes will be showed with a slightly different colour.
-				if (name == wxT("wxWindow"))
+				if (!AppData()->IsDarkMode())
 				{
-					m_eg->SetPropertyBackgroundColour( id, wxColour( 255, 255, 205 ) ); // Yellow
-					m_pg->SetPropertyTextColour(id, *wxBLACK); //in case of a dark theme
+					if (name == wxT("wxWindow"))
+						m_pg->SetPropertyBackgroundColour(id,wxColour(255,255,205)); // yellow
+					else if (name == wxT("AUI"))
+						m_pg->SetPropertyBackgroundColour(id,wxColour(240,240,255)); // light blue
+					else if (name == wxT("sizeritem") || name == wxT("gbsizeritem") || name == wxT("sizeritembase"))
+						m_pg->SetPropertyBackgroundColour(id,wxColour(220,255,255)); // cyan
 				}
-				else if (name == wxT("AUI Events"))
+				else
 				{
-					m_eg->SetPropertyBackgroundColour( id, wxColour(240,240,255) ); // light blue
-					m_pg->SetPropertyTextColour(id, *wxBLACK); //in case of a dark theme
-				}
-				else if (name == wxT("sizeritem") || name == wxT("gbsizeritem") || name == wxT("sizeritembase") )
-				{
-					m_eg->SetPropertyBackgroundColour( id, wxColour( 220, 255, 255 ) ); // Cyan
-					m_pg->SetPropertyTextColour(id, *wxBLACK); //in case of a dark theme
+					if (name == wxT("wxWindow"))
+						m_pg->SetPropertyBackgroundColour(id,wxColour(127,127,51)); // dark yellow
+					else if (name == wxT("AUI"))
+						m_pg->SetPropertyBackgroundColour(id,wxColour(76,76,153)); // dark blue
+					else if (name == wxT("sizeritem") || name == wxT("gbsizeritem") || name == wxT("sizeritembase"))
+						m_pg->SetPropertyBackgroundColour(id,wxColour(51,127,127)); // dark cyan
 				}
 			}
 
