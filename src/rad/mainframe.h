@@ -141,6 +141,7 @@ class MainFrame : public wxFrame
   void OnXrcPreview(wxCommandEvent& e);
   void OnGenInhertedClass(wxCommandEvent& e);
   void OnWindowSwap(wxCommandEvent& e);
+  void OnFindComponent(wxCommandEvent& e);
 
   void OnAuiNotebookPageChanged( wxAuiNotebookEvent& event );
 
@@ -164,6 +165,7 @@ class MainFrame : public wxFrame
   wxWindow  *CreateObjectTree       (wxWindow *parent);
   wxWindow  *CreateObjectInspector  (wxWindow *parent);
   wxMenuBar *CreateFBMenuBar();
+  wxMenu    *CreateMenuComponents();
   wxToolBar *CreateFBToolBar();
 
   void CreateWideGui();

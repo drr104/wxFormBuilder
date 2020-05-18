@@ -100,6 +100,9 @@ enum
 
 	//added by tyysoft to define the swap button ID.
 	ID_WINDOW_SWAP,
+
+    //added by michallukowski to find component from menu.
+    ID_FIND_COMPONENT,
 };
 
 #define STATUS_FIELD_OBJECT 2
@@ -142,6 +145,7 @@ EVT_MENU( ID_GEN_INHERIT_CLS, MainFrame::OnGenInhertedClass )
 EVT_MENU( ID_CLIPBOARD_COPY, MainFrame::OnClipboardCopy )
 EVT_MENU( ID_CLIPBOARD_PASTE, MainFrame::OnClipboardPaste )
 EVT_MENU( ID_WINDOW_SWAP, MainFrame::OnWindowSwap )
+EVT_MENU( ID_FIND_COMPONENT, MainFrame::OnFindComponent )
 
 EVT_UPDATE_UI( ID_CLIPBOARD_PASTE, MainFrame::OnClipboardPasteUpdateUI )
 EVT_CLOSE( MainFrame::OnClose )
@@ -1532,6 +1536,8 @@ wxMenuBar * MainFrame::CreateFBMenuBar()
 	wxMenu *menuTools = new wxMenu;
 	menuTools->Append( ID_GEN_INHERIT_CLS, wxT( "&Generate Inherited Class\tF6" ), wxT( "Creates the needed files and class for proper inheritance of your designed GUI" ) );
 
+    wxMenu *menuComponents = CreateMenuComponents();
+
 	wxMenu *menuHelp = new wxMenu;
 	menuHelp->Append( wxID_ABOUT, wxT( "&About...\tF1" ), wxT( "Show about dialog" ) );
 
@@ -1541,9 +1547,78 @@ wxMenuBar * MainFrame::CreateFBMenuBar()
 	menuBar->Append( menuEdit, wxT( "&Edit" ) );
 	menuBar->Append( menuView, wxT( "&View" ) );
 	menuBar->Append( menuTools, wxT( "&Tools" ) );
+    menuBar->Append( menuComponents, wxT( "&Components" ) );
 	menuBar->Append( menuHelp, wxT( "&Help" ) );
 
-	return menuBar;
+    return menuBar;
+}
+
+wxMenu *MainFrame::CreateMenuComponents()
+{
+    wxMenu *menuComponents = new wxMenu;
+    wxMenu *submenuAllAlphabetic = new wxMenu;
+
+    submenuAllAlphabetic->Append(wxID_ANY, "Test");
+
+    menuComponents->Append( ID_FIND_COMPONENT, wxT( "&Find component..." ), wxT( "Show component finding dialog" ) );
+    menuComponents->AppendSubMenu(submenuAllAlphabetic, wxT( "All alphabetic" ));
+
+    // Package count
+    unsigned int pkg_count = AppData()->GetPackageCount();
+    // Lookup map of all packages
+    std::map<wxString, PObjectPackage> packages;
+    // List of pages to add to the menu in the same order like notebook
+    std::vector<std::pair<wxString, PObjectPackage>> pages;
+    pages.reserve(pkg_count);
+
+    // Fill lookup map of packages
+    for (unsigned int i = 0; i < pkg_count; ++i)
+    {
+        auto pkg = AppData()->GetPackage(i);
+        packages.insert(std::make_pair(pkg->GetPackageName(), pkg));
+    }
+
+    // Read the page order from settings and build the list of pages from it
+    auto* config = wxConfigBase::Get();
+    wxStringTokenizer pageOrder(config->Read(wxT("/palette/pageOrder"), wxT("Common,Additional,Data,Containers,Menu/Toolbar,Layout,Forms,Ribbon")), wxT(","));
+    while (pageOrder.HasMoreTokens())
+    {
+        const auto packageName = pageOrder.GetNextToken();
+        auto package = packages.find(packageName);
+        if (packages.end() == package)
+        {
+            // Plugin missing - move on
+            continue;
+        }
+
+        // Add package to pages list and remove from lookup map
+        pages.push_back(std::make_pair(package->first, package->second));
+        packages.erase(package);
+    }
+
+    // The remaining packages from the lookup map need to be added to the page list
+    for (auto& package : packages)
+    {
+        pages.push_back(std::make_pair(package.first, package.second));
+    }
+    packages.clear();
+
+    for (size_t i = 0; i < pages.size(); ++i)
+    {
+        const auto& page = pages[i];
+
+        wxMenu* submenu = new wxMenu;
+
+        submenu->Append(wxID_ANY, "tu komponenty");
+
+        menuComponents->AppendSubMenu(submenu, page.first);
+
+//        PopulateToolbar(page.second, toolbar);
+//		m_notebook->SetPageBitmap(i, page.second->GetPackageIcon());
+
+    }
+
+    return menuComponents;
 }
 
 wxToolBar * MainFrame::CreateFBToolBar()
@@ -1769,4 +1844,9 @@ void MainFrame::OnWindowSwap(wxCommandEvent&) {
 
     m_rightSplitter->SetSashPosition(sz.GetWidth() - pos);
 
+}
+
+void MainFrame::OnFindComponent(wxCommandEvent &e)
+{
+    wxMessageBox("Here will be dialog box for searching components");
 }
