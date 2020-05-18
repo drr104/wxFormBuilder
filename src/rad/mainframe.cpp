@@ -1609,16 +1609,35 @@ wxMenu *MainFrame::CreateMenuComponents()
 
         wxMenu* submenu = new wxMenu;
 
-        submenu->Append(wxID_ANY, "tu komponenty");
-
+        CreateSubmenuComponents(page.second, submenu);
         menuComponents->AppendSubMenu(submenu, page.first);
-
-//        PopulateToolbar(page.second, toolbar);
-//		m_notebook->SetPageBitmap(i, page.second->GetPackageIcon());
-
     }
 
     return menuComponents;
+}
+
+void MainFrame::CreateSubmenuComponents(PObjectPackage pkg, wxMenu *submenu)
+{
+    unsigned int j = 0;
+    while ( j < pkg->GetObjectCount() )
+    {
+        PObjectInfo info = pkg->GetObjectInfo( j );
+        if ( info->IsStartOfGroup() )
+        {
+            submenu->AppendSeparator();
+        }
+        if ( NULL == info->GetComponent() )
+        {
+            LogDebug(_("Missing Component for Class \"" + info->GetClassName() + "\" of Package \"" + pkg->GetPackageName() + "\".") );
+        }
+        else
+        {
+            wxString widget( info->GetClassName() );
+
+            submenu->Append(wxID_ANY, widget); //TODO: find out how to get ID
+        }
+        j++;
+    }
 }
 
 wxToolBar * MainFrame::CreateFBToolBar()

@@ -31,6 +31,8 @@
 #include <wx/aui/auibook.h>
 #include <wx/fdrepdlg.h>
 
+#include "../utils/wxfbdefs.h"
+
 class wxFBEvent;
 class wxFBObjectEvent;
 class wxFBPropertyEvent;
@@ -166,6 +168,7 @@ class MainFrame : public wxFrame
   wxWindow  *CreateObjectInspector  (wxWindow *parent);
   wxMenuBar *CreateFBMenuBar();
   wxMenu    *CreateMenuComponents();
+  void       CreateSubmenuComponents(PObjectPackage pkg, wxMenu* submenu);
   wxToolBar *CreateFBToolBar();
 
   void CreateWideGui();
