@@ -1555,13 +1555,10 @@ wxMenuBar * MainFrame::CreateFBMenuBar()
 
 wxMenu *MainFrame::CreateMenuComponents()
 {
+    wxWindowID nextId = wxID_HIGHEST + 3000;
     wxMenu *menuComponents = new wxMenu;
-    wxMenu *submenuAllAlphabetic = new wxMenu;
-
-    submenuAllAlphabetic->Append(wxID_ANY, "Test");
 
     menuComponents->Append( ID_FIND_COMPONENT, wxT( "&Find component..." ), wxT( "Show component finding dialog" ) );
-    menuComponents->AppendSubMenu(submenuAllAlphabetic, wxT( "All alphabetic" ));
 
     // Package count
     unsigned int pkg_count = AppData()->GetPackageCount();
@@ -1609,16 +1606,17 @@ wxMenu *MainFrame::CreateMenuComponents()
 
         wxMenu* submenu = new wxMenu;
 
-        CreateSubmenuComponents(page.second, submenu);
+        CreateSubmenuComponents(page.second, submenu, nextId);
         menuComponents->AppendSubMenu(submenu, page.first);
     }
 
     return menuComponents;
 }
 
-void MainFrame::CreateSubmenuComponents(PObjectPackage pkg, wxMenu *submenu)
+void MainFrame::CreateSubmenuComponents(PObjectPackage pkg, wxMenu *submenu, wxWindowID& nextID)
 {
     unsigned int j = 0;
+
     while ( j < pkg->GetObjectCount() )
     {
         PObjectInfo info = pkg->GetObjectInfo( j );
@@ -1634,7 +1632,8 @@ void MainFrame::CreateSubmenuComponents(PObjectPackage pkg, wxMenu *submenu)
         {
             wxString widget( info->GetClassName() );
 
-            submenu->Append(wxID_ANY, widget); //TODO: find out how to get ID
+            Bind(wxEVT_MENU, &MainFrame::OnMenuComponentsClick, this, nextID);
+            submenu->Append(nextID++, widget);
         }
         j++;
     }
@@ -1868,4 +1867,20 @@ void MainFrame::OnWindowSwap(wxCommandEvent&) {
 void MainFrame::OnFindComponent(wxCommandEvent &e)
 {
     wxMessageBox("Here will be dialog box for searching components");
+}
+
+void MainFrame::OnMenuComponentsClick(wxCommandEvent &e)
+{
+    const ToolbarVector& tv = m_palette->GetToolbarVector();
+
+    for ( unsigned int i = 0; i < tv.size(); i++ )
+    {
+        if ( tv[i]->GetToolIndex( e.GetId() ) != wxNOT_FOUND )
+        {
+            wxString name = tv[i]->GetToolShortHelp( e.GetId() );
+            AppData()->CreateObject( name );
+            return;
+        }
+    }
+
 }
