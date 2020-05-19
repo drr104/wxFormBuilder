@@ -34,6 +34,7 @@ elseif(APPLE)
 else()
     set(INSTALL_BIN_DIR "bin")
     set(INSTALL_SHARE_DIR "share/wxformbuilder")
+    set(INSTALL_LIB_DIR "lib/wxformbuilder")
 endif()
 
 set(CMAKE_INSTALL_SYSTEM_RUNTIME_DESTINATION ${INSTALL_BIN_DIR})

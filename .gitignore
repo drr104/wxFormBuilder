@@ -26,4 +26,5 @@ install/windows/*.exe
 /compile_commands.json
 /.ccls-cache/
 CMakeLists.txt.user*
+cmake_install
 
