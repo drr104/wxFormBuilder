@@ -59,8 +59,6 @@ class wxFbPalette : public wxPanel
   void OnSpinUp(wxSpinEvent& e);
   void OnSpinDown(wxSpinEvent& e);
   void OnButtonClick(wxCommandEvent &event);
-
-  const ToolbarVector& GetToolbarVector() {return m_tv;}
 };
 /*
 class PaletteButton : public wxBitmapButton

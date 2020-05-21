@@ -1553,12 +1553,13 @@ wxMenuBar * MainFrame::CreateFBMenuBar()
     return menuBar;
 }
 
-wxMenu *MainFrame::CreateMenuComponents()
+wxMenu * MainFrame::CreateMenuComponents()
 {
     wxWindowID nextId = wxID_HIGHEST + 3000;
     wxMenu *menuComponents = new wxMenu;
 
-    menuComponents->Append( ID_FIND_COMPONENT, wxT( "&Find component..." ), wxT( "Show component finding dialog" ) );
+    menuComponents->Append( ID_FIND_COMPONENT, wxT( "&Find component..." ),
+                            wxT( "Show component finding dialog" ) );
 
     // Package count
     unsigned int pkg_count = AppData()->GetPackageCount();
@@ -1566,54 +1567,56 @@ wxMenu *MainFrame::CreateMenuComponents()
     std::map<wxString, PObjectPackage> packages;
     // List of pages to add to the menu in the same order like notebook
     std::vector<std::pair<wxString, PObjectPackage>> pages;
-    pages.reserve(pkg_count);
+    pages.reserve( pkg_count );
 
     // Fill lookup map of packages
-    for (unsigned int i = 0; i < pkg_count; ++i)
+    for ( unsigned int i = 0; i < pkg_count; ++i )
     {
-        auto pkg = AppData()->GetPackage(i);
-        packages.insert(std::make_pair(pkg->GetPackageName(), pkg));
+        auto pkg = AppData()->GetPackage( i );
+        packages.insert( std::make_pair( pkg->GetPackageName(), pkg ) );
     }
 
     // Read the page order from settings and build the list of pages from it
-    auto* config = wxConfigBase::Get();
-    wxStringTokenizer pageOrder(config->Read(wxT("/palette/pageOrder"), wxT("Common,Additional,Data,Containers,Menu/Toolbar,Layout,Forms,Ribbon")), wxT(","));
-    while (pageOrder.HasMoreTokens())
+    auto *config = wxConfigBase::Get();
+    wxStringTokenizer pageOrder( config->Read( wxT( "/palette/pageOrder" ),
+                                             wxT( "Common,Additional,Data,Containers,Menu/Toolbar,"
+                                                 "Layout,Forms,Ribbon" ) ), wxT( "," ) );
+    while ( pageOrder.HasMoreTokens() )
     {
         const auto packageName = pageOrder.GetNextToken();
-        auto package = packages.find(packageName);
-        if (packages.end() == package)
+        auto package = packages.find( packageName );
+        if ( packages.end() == package )
         {
             // Plugin missing - move on
             continue;
         }
 
         // Add package to pages list and remove from lookup map
-        pages.push_back(std::make_pair(package->first, package->second));
-        packages.erase(package);
+        pages.push_back( std::make_pair( package->first, package->second ) );
+        packages.erase( package );
     }
 
     // The remaining packages from the lookup map need to be added to the page list
-    for (auto& package : packages)
+    for ( auto& package : packages )
     {
-        pages.push_back(std::make_pair(package.first, package.second));
+        pages.push_back( std::make_pair( package.first, package.second ) );
     }
     packages.clear();
 
-    for (size_t i = 0; i < pages.size(); ++i)
+    for ( size_t i = 0; i < pages.size(); ++i )
     {
         const auto& page = pages[i];
 
-        wxMenu* submenu = new wxMenu;
+        wxMenu *submenu = new wxMenu;
 
-        CreateSubmenuComponents(page.second, submenu, nextId);
-        menuComponents->AppendSubMenu(submenu, page.first);
+        CreateSubmenuComponents( page.second, submenu, nextId );
+        menuComponents->AppendSubMenu( submenu, page.first );
     }
 
     return menuComponents;
 }
 
-void MainFrame::CreateSubmenuComponents(PObjectPackage pkg, wxMenu *submenu, wxWindowID& nextID)
+void MainFrame::CreateSubmenuComponents( PObjectPackage pkg, wxMenu *submenu, wxWindowID& nextID )
 {
     unsigned int j = 0;
 
@@ -1624,16 +1627,17 @@ void MainFrame::CreateSubmenuComponents(PObjectPackage pkg, wxMenu *submenu, wxW
         {
             submenu->AppendSeparator();
         }
-        if ( NULL == info->GetComponent() )
+        if ( nullptr == info->GetComponent() )
         {
-            LogDebug(_("Missing Component for Class \"" + info->GetClassName() + "\" of Package \"" + pkg->GetPackageName() + "\".") );
+            LogDebug( _( "Missing Component for Class \"" + info->GetClassName() +
+                       "\" of Package \"" + pkg->GetPackageName() + "\"." ) );
         }
         else
         {
             wxString widget( info->GetClassName() );
 
-            Bind(wxEVT_MENU, &MainFrame::OnMenuComponentsClick, this, nextID);
-            submenu->Append(nextID++, widget);
+            Bind( wxEVT_MENU, &MainFrame::OnMenuComponentsClick, this, nextID );
+            submenu->Append( nextID++, widget );
         }
         j++;
     }
@@ -1850,7 +1854,8 @@ void MainFrame::OnSplitterChanged( wxSplitterEvent &event )
 	m_rightSplitter_sash_pos = event.GetSashPosition();
 }
 
-void MainFrame::OnWindowSwap(wxCommandEvent&) {
+void MainFrame::OnWindowSwap(wxCommandEvent&)
+{
     wxWindow* win1 = m_rightSplitter->GetWindow1();
     wxWindow* win2 = m_rightSplitter->GetWindow2();
 
@@ -1861,26 +1866,17 @@ void MainFrame::OnWindowSwap(wxCommandEvent&) {
     m_rightSplitter->SplitVertically(win2, win1);
 
     m_rightSplitter->SetSashPosition(sz.GetWidth() - pos);
-
 }
 
-void MainFrame::OnFindComponent(wxCommandEvent &e)
+void MainFrame::OnFindComponent( wxCommandEvent &e )
 {
     wxMessageBox("Here will be dialog box for searching components");
 }
 
-void MainFrame::OnMenuComponentsClick(wxCommandEvent &e)
+void MainFrame::OnMenuComponentsClick( wxCommandEvent &e )
 {
-    const ToolbarVector& tv = m_palette->GetToolbarVector();
+    wxMenu      *menu = static_cast<wxMenu*>( e.GetEventObject() );
+    wxMenuItem  *item = menu->FindChildItem( e.GetId() );
 
-    for ( unsigned int i = 0; i < tv.size(); i++ )
-    {
-        if ( tv[i]->GetToolIndex( e.GetId() ) != wxNOT_FOUND )
-        {
-            wxString name = tv[i]->GetToolShortHelp( e.GetId() );
-            AppData()->CreateObject( name );
-            return;
-        }
-    }
-
+    AppData()->CreateObject( item->GetItemLabelText() );
 }
