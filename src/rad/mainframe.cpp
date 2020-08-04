@@ -1607,27 +1607,28 @@ wxMenu * MainFrame::CreateMenuComponents()
     {
         const auto& page = pages[i];
 
-        wxMenu *submenu = new wxMenu;
+        wxMenu *submenu = CreateSubmenuComponents( page.second, nextId );
 
-        CreateSubmenuComponents( page.second, submenu, nextId );
         menuComponents->AppendSubMenu( submenu, page.first );
     }
 
     return menuComponents;
 }
 
-void MainFrame::CreateSubmenuComponents( PObjectPackage pkg, wxMenu *submenu, wxWindowID& nextID )
+wxMenu * MainFrame::CreateSubmenuComponents( PObjectPackage pkg, wxWindowID& nextID )
 {
+    wxMenu *submenu = new wxMenu;
     unsigned int j = 0;
 
     while ( j < pkg->GetObjectCount() )
     {
         PObjectInfo info = pkg->GetObjectInfo( j );
+
         if ( info->IsStartOfGroup() )
         {
             submenu->AppendSeparator();
         }
-        if ( nullptr == info->GetComponent() )
+        else if ( nullptr == info->GetComponent() )
         {
             LogDebug( _( "Missing Component for Class \"" + info->GetClassName() +
                        "\" of Package \"" + pkg->GetPackageName() + "\"." ) );
@@ -1641,6 +1642,8 @@ void MainFrame::CreateSubmenuComponents( PObjectPackage pkg, wxMenu *submenu, wx
         }
         j++;
     }
+
+    return submenu;
 }
 
 wxToolBar * MainFrame::CreateFBToolBar()
@@ -1870,6 +1873,27 @@ void MainFrame::OnWindowSwap(wxCommandEvent&)
 
 void MainFrame::OnFindComponent( wxCommandEvent &e )
 {
+    wxArrayString components;
+
+    for ( unsigned i = 0; i < AppData()->GetPackageCount(); ++i )
+    {
+        auto pkg = AppData()->GetPackage( i );
+
+        for ( unsigned j = 0; j < pkg->GetObjectCount(); ++j)
+        {
+            PObjectInfo info = pkg->GetObjectInfo( j );
+
+            components.Add(info->GetClassName());
+        }
+    }
+
+    components.Sort();
+
+    for (auto component : components)
+    {
+        std::cout << component.ToStdString() << std::endl;
+    }
+
     wxMessageBox("Here will be dialog box for searching components");
 }
 
