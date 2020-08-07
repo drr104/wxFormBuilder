@@ -46,6 +46,7 @@
 #include "wxfbevent.h"
 #include "wxfbmanager.h"
 #include "xrcpanel/xrcpanel.h"
+#include "dialogfindcomponent.h"
 
 enum
 {
@@ -1558,7 +1559,7 @@ wxMenu * MainFrame::CreateMenuComponents()
     wxWindowID nextId = wxID_HIGHEST + 3000;
     wxMenu *menuComponents = new wxMenu;
 
-    menuComponents->Append( ID_FIND_COMPONENT, wxT( "&Find component..." ),
+    menuComponents->Append( ID_FIND_COMPONENT, wxT( "&Find component...\tCtrl+Shift+F" ),
                             wxT( "Show component finding dialog" ) );
 
     // Package count
@@ -1889,12 +1890,16 @@ void MainFrame::OnFindComponent( wxCommandEvent &e )
 
     components.Sort();
 
-    for (auto component : components)
-    {
-        std::cout << component.ToStdString() << std::endl;
-    }
+    DialogFindComponent dlg(this, components);
 
-    wxMessageBox("Here will be dialog box for searching components");
+    dlg.ShowModal();
+
+    auto component = dlg.GetSelected();
+
+    if (component != wxEmptyString)
+    {
+        AppData()->CreateObject( component );
+    }
 }
 
 void MainFrame::OnMenuComponentsClick( wxCommandEvent &e )

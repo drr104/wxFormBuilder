@@ -7,6 +7,7 @@ set(wxFB_SRCS
     rad/bitmaps.cpp
     rad/cmdproc.cpp
     rad/customkeys.cpp
+    rad/dialogfindcomponent.cpp
     rad/genericpanel.cpp
     rad/mainframe.cpp
     rad/menueditor.cpp
