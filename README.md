@@ -34,6 +34,37 @@ cd ../../../output/
 ./wxFormBuilder.exe
 ```
 
+###Windows (MSYS2 and CMake):
+
+Install MSYS2 and run the following inside a:
+
+MinGW 32 bit shell:
+
+```sh
+pacman -S --needed mingw-w64-i686-gcc mingw-w64-i686-wxWidgets mingw-w64-i686-cmake make git
+```
+
+or MinGW 64 bit shell:
+
+```sh
+pacman -S --needed mingw-w64-x86_64-gcc mingw-w64-x86_64-wxWidgets mingw-w64-x86_64-cmake make git
+```
+
+Build:
+
+```sh
+git clone --recursive --depth=1 https://github.com/wxFormBuilder/wxFormBuilder
+cd wxFormBuilder
+cmake -G 'MSYS Makefiles' -S . -B build/cmake
+cmake --install build/cmake --prefix cmake_install
+```
+
+Run:
+
+```sh
+./cmake_install/wxFormBuilder.exe
+```
+
 ### Linux
 
 Pre-requisites for Ubuntu:

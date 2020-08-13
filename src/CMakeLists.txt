@@ -80,24 +80,24 @@ add_executable(wxFormBuilder WIN32 MACOSX_BUNDLE
     ${wxFB_SRCS}
 )
 
-if(APPLE)
-    set_target_properties(wxFormBuilder PROPERTIES
-        MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.in"
-        MACOSX_BUNDLE_GUI_IDENTIFIER "org.wxformbuilder.rad"
-        MACOSX_BUNDLE_SHORT_VERSION_STRING "${CPACK_PACKAGE_VERSION}"
-        )
-else()
-    add_custom_command(TARGET wxFormBuilder POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/output/resources
-        ${CMAKE_SOURCE_DIR}/cmake_install/${INSTALL_SHARE_DIR}/resources
-        COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/output/xml
-        ${CMAKE_SOURCE_DIR}/cmake_install/${INSTALL_SHARE_DIR}/xml
-        COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/output/plugins
-        ${CMAKE_SOURCE_DIR}/cmake_install/${INSTALL_SHARE_DIR}/plugins
-        COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/wxFormBuilder
-        ${CMAKE_SOURCE_DIR}/cmake_install/${INSTALL_BIN_DIR}/wxformbuilder
-    )
-endif()
+#if(APPLE)
+#    set_target_properties(wxFormBuilder PROPERTIES
+#        MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.in"
+#        MACOSX_BUNDLE_GUI_IDENTIFIER "org.wxformbuilder.rad"
+#        MACOSX_BUNDLE_SHORT_VERSION_STRING "${CPACK_PACKAGE_VERSION}"
+#    )
+#else()
+#    add_custom_command(TARGET wxFormBuilder POST_BUILD
+#        COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/output/resources
+#        ${CMAKE_SOURCE_DIR}/${INSTALL_ROOT_DIR}${INSTALL_SHARE_DIR}resources
+#        COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/output/xml
+#        ${CMAKE_SOURCE_DIR}/${INSTALL_ROOT_DIR}${INSTALL_SHARE_DIR}xml
+#        COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/output/plugins
+#        ${CMAKE_SOURCE_DIR}/${INSTALL_ROOT_DIR}${INSTALL_SHARE_DIR}plugins
+#        COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/wxFormBuilder${CMAKE_EXECUTABLE_SUFFIX}
+#        ${CMAKE_SOURCE_DIR}/${INSTALL_ROOT_DIR}${INSTALL_BIN_DIR}wxFormBuilder${CMAKE_EXECUTABLE_SUFFIX}
+#    )
+#endif()
 
 target_include_directories(wxFormBuilder
     PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}
@@ -135,8 +135,9 @@ if(WIN32)
     endif()
 endif()
 
-if(CMAKE_GENERATOR MATCHES "^MSYS")
-    set(MINGW_BIN_DIR "C:/msys64/mingw32/bin")
+if(MSYS)
+    find_path(MSYS_PATH include/binutils/bfd.h)
+    set(MINGW_BIN_DIR "${MSYS_PATH}/bin")
     set(MINGW_MODULES
         libexpat
         libgcc
@@ -148,48 +149,51 @@ if(CMAKE_GENERATOR MATCHES "^MSYS")
         libstdc++
         libtiff
         libwinpthread
+        libzstd
+        zlib
         wx
-        zlib)
+        )
     foreach(mod IN LISTS MINGW_MODULES)
         file(GLOB mods "${MINGW_BIN_DIR}/${mod}*.dll")
         list(APPEND MINGW_FILES ${mods})
     endforeach()
     install(FILES ${MINGW_FILES} DESTINATION .)
-elseif(WIN32)
-    file(GLOB WXLIBS "${wxWidgets_LIB_DIR}/wx*.dll")
-    foreach(lib IN LISTS WXLIBS)
-        if(${lib} MATCHES "ud_*")
-            list(APPEND WXLIBS_DEBUG ${lib})
-        else()
-            list(APPEND WXLIBS_RELEASE ${lib})
-        endif()
-    endforeach()
+#elseif(WIN32)
+#    file(GLOB WXLIBS "${wxWidgets_LIB_DIR}/wx*.dll")
+#    foreach(lib IN LISTS WXLIBS)
+#        if(${lib} MATCHES "ud_*")
+#            list(APPEND WXLIBS_DEBUG ${lib})
+#        else()
+#            list(APPEND WXLIBS_RELEASE ${lib})
+#        endif()
+#    endforeach()
     
-    install(FILES ${WXLIBS_DEBUG} DESTINATION . CONFIGURATIONS Debug)
-    install(FILES ${WXLIBS_RELEASE} DESTINATION . CONFIGURATIONS Release)
+#    install(FILES ${WXLIBS_DEBUG} DESTINATION . CONFIGURATIONS Debug)
+#    install(FILES ${WXLIBS_RELEASE} DESTINATION . CONFIGURATIONS Release)
 endif()
 
 install(TARGETS wxFormBuilder
     BUNDLE DESTINATION .
-    RUNTIME DESTINATION ${INSTALL_BIN_DIR}
+    RUNTIME DESTINATION .
 )
 
 if(APPLE)
-    set(fixup_exe "\${CMAKE_INSTALL_PREFIX}/wxFormBuilder.app")
-    set(FB_PLUGINS common additional containers forms layout)
+#    set(fixup_exe "\${CMAKE_INSTALL_PREFIX}/wxFormBuilder.app")
+#    set(FB_PLUGINS common additional containers forms layout)
 
-    foreach(plugin IN LISTS FB_PLUGINS)
-        set(fixup_libs ${fixup_libs} ${fixup_exe}/Contents/PlugIns/${CMAKE_SHARED_LIBRARY_PREFIX}${plugin}${CMAKE_SHARED_LIBRARY_SUFFIX})
-    endforeach()
+#    foreach(plugin IN LISTS FB_PLUGINS)
+#        set(fixup_libs ${fixup_libs} ${fixup_exe}/Contents/PlugIns/${CMAKE_SHARED_LIBRARY_PREFIX}${plugin}${CMAKE_SHARED_LIBRARY_SUFFIX})
+#    endforeach()
 
-    install(CODE "
-    include(\"BundleUtilities\")
-    fixup_bundle(\"${fixup_exe}\" \"${fixup_libs}\" \"\")
-    " ${COMPONENT})
+#    install(CODE "
+#    include(\"BundleUtilities\")
+#    fixup_bundle(\"${fixup_exe}\" \"${fixup_libs}\" \"\")
+#    " ${COMPONENT})
 else()
     install(DIRECTORY
-        ${CMAKE_SOURCE_DIR}/output/xml 
+        ${CMAKE_SOURCE_DIR}/output/xml
         ${CMAKE_SOURCE_DIR}/output/resources
         ${CMAKE_SOURCE_DIR}/output/plugins
-        DESTINATION ${INSTALL_SHARE_DIR})
+        DESTINATION .
+        )
 endif()

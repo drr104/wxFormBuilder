@@ -27,4 +27,3 @@ install/windows/*.exe
 /.ccls-cache/
 CMakeLists.txt.user*
 cmake_install
-
