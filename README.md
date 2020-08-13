@@ -34,9 +34,9 @@ cd ../../../output/
 ./wxFormBuilder.exe
 ```
 
-###Windows (MSYS2 and CMake):
+### Windows (MSYS2 and CMake):
 
-Install MSYS2 and run the following inside a:
+Install [MSYS2](http://msys2.github.io/) and run the following inside a:
 
 MinGW 32 bit shell:
 
@@ -56,6 +56,7 @@ Build:
 git clone --recursive --depth=1 https://github.com/wxFormBuilder/wxFormBuilder
 cd wxFormBuilder
 cmake -G 'MSYS Makefiles' -S . -B build/cmake
+cmake --build build/cmake
 cmake --install build/cmake --prefix cmake_install
 ```
 
@@ -65,12 +66,12 @@ Run:
 ./cmake_install/wxFormBuilder.exe
 ```
 
-### Linux
+### Linux (Meson)
 
 Pre-requisites for Ubuntu:
 
 ```sh
-sudo apt install libwxgtk3.0-gtk3-dev libwxgtk-media3.0-gtk3-dev meson
+sudo apt install libwxgtk3.0-gtk3-dev libwxgtk-media3.0-gtk3-dev meson 
 ```
 
 Pre-requisites for Arch Linux:
@@ -79,7 +80,7 @@ Pre-requisites for Arch Linux:
 sudo pacman -Syu --needed meson wxgtk2
 ```
 
-Build and run:
+Build:
 
 ```sh
 git clone --recursive --depth=1 https://github.com/wxFormBuilder/wxFormBuilder
@@ -87,6 +88,42 @@ cd wxFormBuilder
 meson _build --prefix $PWD/_install --buildtype=release
 ninja -C _build install
 ./_install/bin/wxformbuilder
+```
+
+Run:
+
+```sh
+./_install/bin/wxformbuilder
+```
+
+### Linux (CMake)
+
+Pre-requisites for Ubuntu:
+
+```sh
+sudo apt install libwxgtk3.0-gtk3-dev libwxgtk-media3.0-gtk3-dev cmake 
+```
+
+Pre-requisites for Arch Linux:
+
+```sh
+sudo pacman -Syu --needed cmake wxgtk2
+```
+
+Build:
+
+```sh
+git clone --recursive --depth=1 https://github.com/wxFormBuilder/wxFormBuilder
+cd wxFormBuilder
+cmake -S . -B build/cmake
+cmake --build build/cmake
+cmake --install build/cmake --prefix cmake_install
+```
+
+Run:
+
+```sh
+./cmake_install/wxFormBuilder.exe
 ```
 
 ### macOS
