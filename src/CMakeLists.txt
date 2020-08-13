@@ -7,6 +7,7 @@ set(wxFB_SRCS
     rad/bitmaps.cpp
     rad/cmdproc.cpp
     rad/customkeys.cpp
+    rad/dialogfindcomponent.cpp
     rad/genericpanel.cpp
     rad/mainframe.cpp
     rad/menueditor.cpp
@@ -88,6 +89,7 @@ if(APPLE)
 else()
     add_custom_command(TARGET wxFormBuilder POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/output/resources
+<<<<<<< HEAD
         ${CMAKE_CURRENT_BINARY_DIR}/${INSTALL_ROOT_DIR}/${INSTALL_SHARE_DIR}/resources
         COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/output/xml
         ${CMAKE_CURRENT_BINARY_DIR}/${INSTALL_ROOT_DIR}/${INSTALL_SHARE_DIR}/xml
@@ -95,6 +97,15 @@ else()
         ${CMAKE_SOURCE_DIR}/${INSTALL_ROOT_DIR}/${INSTALL_SHARE_DIR}/plugins
         COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/wxFormBuilder
         ${CMAKE_SOURCE_DIR}/${INSTALL_ROOT_DIR}/${INSTALL_BIN_DIR}/wxformbuilder
+=======
+        ${CMAKE_SOURCE_DIR}/cmake_install/${INSTALL_SHARE_DIR}/resources
+        COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/output/xml
+        ${CMAKE_SOURCE_DIR}/cmake_install/${INSTALL_SHARE_DIR}/xml
+        COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/output/plugins
+        ${CMAKE_SOURCE_DIR}/cmake_install/${INSTALL_SHARE_DIR}/plugins
+        COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/wxFormBuilder
+        ${CMAKE_SOURCE_DIR}/cmake_install/${INSTALL_BIN_DIR}/wxformbuilder
+>>>>>>> a21144bba51078edbbc80b2a508ec1033c4c9b08
     )
 endif()
 
