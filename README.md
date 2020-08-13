@@ -34,7 +34,7 @@ cd ../../../output/
 ./wxFormBuilder.exe
 ```
 
-###Windows (MSYS2 and CMake):
+### Windows (MSYS2 and CMake):
 
 Install MSYS2 and run the following inside a:
 
