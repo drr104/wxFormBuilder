@@ -56,7 +56,7 @@ if(MSYS)
     list(APPEND wxFB_SRCS wxFormBuilder.rc)
 endif()
 
-add_executable(wxFormBuilder WIN32 MACOSX_BUNDLE
+add_executable(wxFormBuilder WIN32
     ${wxFB_SRCS}
 )
 

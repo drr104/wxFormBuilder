@@ -57,7 +57,7 @@ git clone --recursive --depth=1 https://github.com/wxFormBuilder/wxFormBuilder
 cd wxFormBuilder
 cmake -G 'MSYS Makefiles' -S . -B build/cmake
 cmake --build build/cmake
-cmake --install build/cmake --prefix cmake_install
+cmake --install build/cmake
 ```
 
 Run:
@@ -117,7 +117,7 @@ git clone --recursive --depth=1 https://github.com/wxFormBuilder/wxFormBuilder
 cd wxFormBuilder
 cmake -S . -B build/cmake
 cmake --build build/cmake
-cmake --install build/cmake --prefix cmake_install
+cmake --install build/cmake
 ```
 
 Run:
