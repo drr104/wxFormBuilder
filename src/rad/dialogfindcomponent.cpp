@@ -25,6 +25,7 @@
 
 #include "dialogfindcomponent.h"
 #include <wx/sizer.h>
+#include <wx/msgdlg.h>
 
 
 DialogFindComponent::DialogFindComponent(wxWindow* parent, const wxArrayString& componentsList,
@@ -57,6 +58,8 @@ DialogFindComponent::DialogFindComponent(wxWindow* parent, const wxArrayString& 
     m_textCtrlComponent->Bind(wxEVT_TEXT, &DialogFindComponent::OnTextCtrlComponent, this);
     m_listBoxComponents->Bind(wxEVT_LISTBOX_DCLICK, &DialogFindComponent::OnListBoxComponentsDClick,
                               this);
+//    this->Bind(wxEVT_KEY_UP, &DialogFindComponent::OnKeyUpComponents);
+    this->Connect( wxEVT_KEY_UP, wxKeyEventHandler( DialogFindComponent::OnKeyUpComponents ) );
 
     if (m_componentsList.Count())
     {
@@ -102,5 +105,10 @@ void DialogFindComponent::OnListBoxComponentsDClick(wxCommandEvent &event)
 {
     m_chosenComponent = m_listBoxComponents->GetString(m_listBoxComponents->GetSelection());
     this->Close();
+}
+
+void DialogFindComponent::OnKeyUpComponents(wxKeyEvent &event)
+{
+    wxMessageBox("Test");
 }
 

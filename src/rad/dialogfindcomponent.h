@@ -60,6 +60,7 @@ public:
 private:
     void OnTextCtrlComponent(wxCommandEvent& event);
     void OnListBoxComponentsDClick(wxCommandEvent& event);
+    void OnKeyUpComponents(wxKeyEvent &event);
 
     wxScrolledWindow* m_scrolledWindow;
     wxTextCtrl* m_textCtrlComponent;
