@@ -60,7 +60,7 @@ public:
 private:
     void OnTextCtrlComponent(wxCommandEvent& event);
     void OnListBoxComponentsDClick(wxCommandEvent& event);
-    void OnKeyUpComponents(wxKeyEvent &event);
+    void OnKeyDownComponents(wxKeyEvent &event);
 
     wxScrolledWindow* m_scrolledWindow;
     wxTextCtrl* m_textCtrlComponent;
@@ -69,6 +69,13 @@ private:
     const wxArrayString& m_componentsList;
     wxArrayString m_componentsFinded;
     wxString m_chosenComponent = wxEmptyString;
+
+    enum
+    {
+        ID_LIST_BOX = wxID_HIGHEST + 1,
+        ID_TEXT_CTRL
+    };
+    void ListBoxComponentChoose();
 };
 
 #endif // DIALOGFINDCOMPONENT_H

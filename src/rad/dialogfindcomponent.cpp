@@ -43,10 +43,10 @@ DialogFindComponent::DialogFindComponent(wxWindow* parent, const wxArrayString& 
     wxBoxSizer* bSizer2;
     bSizer2 = new wxBoxSizer( wxVERTICAL );
 
-    m_textCtrlComponent = new wxTextCtrl( m_scrolledWindow, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+    m_textCtrlComponent = new wxTextCtrl( m_scrolledWindow, ID_TEXT_CTRL, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
     bSizer2->Add( m_textCtrlComponent, 0, wxALL|wxEXPAND, 5 );
 
-    m_listBoxComponents = new wxListBox( m_scrolledWindow, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, wxLB_SINGLE );
+    m_listBoxComponents = new wxListBox( m_scrolledWindow, ID_LIST_BOX, wxDefaultPosition, wxDefaultSize, 0, nullptr, wxLB_SINGLE|wxWANTS_CHARS );
     bSizer2->Add( m_listBoxComponents, 1, wxALL|wxEXPAND, 5 );
 
 
@@ -56,10 +56,10 @@ DialogFindComponent::DialogFindComponent(wxWindow* parent, const wxArrayString& 
     bSizerMain->Add( m_scrolledWindow, 1, wxEXPAND | wxALL, 5 );
 
     m_textCtrlComponent->Bind(wxEVT_TEXT, &DialogFindComponent::OnTextCtrlComponent, this);
+    m_textCtrlComponent->Bind(wxEVT_KEY_DOWN, &DialogFindComponent::OnKeyDownComponents, this);
     m_listBoxComponents->Bind(wxEVT_LISTBOX_DCLICK, &DialogFindComponent::OnListBoxComponentsDClick,
                               this);
-//    this->Bind(wxEVT_KEY_UP, &DialogFindComponent::OnKeyUpComponents);
-    this->Connect( wxEVT_KEY_UP, wxKeyEventHandler( DialogFindComponent::OnKeyUpComponents ) );
+    m_listBoxComponents->Bind(wxEVT_KEY_DOWN, &DialogFindComponent::OnKeyDownComponents, this);
 
     if (m_componentsList.Count())
     {
@@ -101,14 +101,36 @@ void DialogFindComponent::OnTextCtrlComponent(wxCommandEvent &event)
     }
 }
 
+void DialogFindComponent::ListBoxComponentChoose()
+{
+    if (m_listBoxComponents->GetSelection() != wxNOT_FOUND)
+    {
+        m_chosenComponent = m_listBoxComponents->GetString(m_listBoxComponents->GetSelection());
+    }
+}
+
 void DialogFindComponent::OnListBoxComponentsDClick(wxCommandEvent &event)
 {
-    m_chosenComponent = m_listBoxComponents->GetString(m_listBoxComponents->GetSelection());
+    ListBoxComponentChoose();
     this->Close();
 }
 
-void DialogFindComponent::OnKeyUpComponents(wxKeyEvent &event)
+void DialogFindComponent::OnKeyDownComponents(wxKeyEvent &event)
 {
-    wxMessageBox("Test");
+    if (event.GetKeyCode() == WXK_ESCAPE)
+    {
+        this->Close();
+    }
+    else if (event.GetKeyCode() == WXK_RETURN || event.GetKeyCode() == WXK_SPACE)
+    {
+        if (event.GetId() == ID_LIST_BOX)
+        {
+            ListBoxComponentChoose();
+            this->Close();
+        }
+    }
+    else
+    {
+        event.Skip();
+    }
 }
-
