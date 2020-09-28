@@ -19,6 +19,10 @@ endif()
 find_package(wxWidgets 3.0 COMPONENTS gl aui adv html core net base xml stc richtext propgrid ribbon xrc REQUIRED)
 include("${wxWidgets_USE_FILE}")
 
+if(UNIX)
+    set(wxWidgets_CONFIG_OPTIONS --toolkit=gtk2)
+endif(UNIX)
+
 set(CPACK_PACKAGE_VERSION_MAJOR 3)
 set(CPACK_PACKAGE_VERSION_MINOR 9)
 set(CPACK_PACKAGE_VERSION_PATCH 0)
