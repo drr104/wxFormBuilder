@@ -101,7 +101,7 @@ Run:
 Pre-requisites for Ubuntu:
 
 ```sh
-sudo apt install libwxgtk3.0-gtk3-dev libwxgtk-media3.0-gtk3-dev cmake 
+sudo apt install build-essential libwxgtk3.0-gtk3-dev libwxgtk-media3.0-gtk3-dev cmake 
 ```
 
 Pre-requisites for Arch Linux:
@@ -116,7 +116,7 @@ Build:
 git clone --recursive --depth=1 https://github.com/wxFormBuilder/wxFormBuilder
 cd wxFormBuilder
 cmake -S . -B build/cmake
-cmake --build build/cmake
+cmake --build build/cmake --parallel
 cmake --install build/cmake
 ```
 
