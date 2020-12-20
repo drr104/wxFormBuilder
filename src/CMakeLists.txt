@@ -51,46 +51,45 @@ set(wxFB_SRCS
     model/database.cpp
 )
 
-if(MSYS)
+if(WIN32)
     list(APPEND wxFB_SRCS wxFormBuilder.rc)
 endif()
 
-add_executable(wxFormBuilder WIN32
+wxfb_add_executable(wxFormBuilder WIN32
     ${wxFB_SRCS}
 )
 
-target_include_directories(wxFormBuilder
-    PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}
-)
-
-target_link_libraries(wxFormBuilder
-    ${wxWidgets_LIBRARIES}
-    ticpp
-    wxfb-plugin-interface
-)
 
 if(MSYS)
     find_path(BINUTILS_BASE_INCLUDE_DIR binutils/bfd.h)
-    target_include_directories(wxFormBuilder
-        PRIVATE ${BINUTILS_BASE_INCLUDE_DIR}/binutils
-    )
-endif()
-
-if(MSYS)
     find_library(BFD_LIB NAMES binutils/libbfd.a libbfd.a)
     find_library(IBERTY_LIB NAMES binutils/libiberty.a libiberty.a)
     find_package(ZLIB REQUIRED)
     find_package(Intl REQUIRED)
 
-    target_link_libraries(wxFormBuilder
+    set(msys_libs 
         ${BFD_LIB}
         ${IBERTY_LIB}
         ${Intl_LIBRARIES}
-        ${ZLIB_LIBRARIES}
-        psapi
-        imagehlp
-    )
+        ${ZLIB_LIBRARIES})
+endif()
 
+target_include_directories(wxFormBuilder
+    PRIVATE 
+        ${CMAKE_CURRENT_SOURCE_DIR}
+        $<$<BOOL:${MSYS}>:${BINUTILS_BASE_INCLUDE_DIR}/binutils> # TODO check PLATFORM_ID on MSYS
+)
+
+target_link_libraries(wxFormBuilder
+    PRIVATE
+        ${wxWidgets_LIBRARIES}
+        ticpp
+        wxfb-plugin-interface
+        "$<$<PLATFORM_ID:Windows>:psapi;imagehlp>"
+        "$<$<BOOL:${MSYS}>:${msys_includes}>"
+)
+
+if(MSYS)
     find_path(MSYS_PATH include/binutils/bfd.h)
     set(MINGW_BIN_DIR "${MSYS_PATH}/bin")
     set(MINGW_MODULES
@@ -115,7 +114,6 @@ if(MSYS)
     endforeach()
     
     install(FILES ${MINGW_FILES} DESTINATION ${INSTALL_BIN_DIR})
-
 endif()
 
 install(TARGETS wxFormBuilder
@@ -123,11 +121,9 @@ install(TARGETS wxFormBuilder
     RUNTIME DESTINATION ${INSTALL_BIN_DIR}
 )
 
-
 install(DIRECTORY
     ${CMAKE_SOURCE_DIR}/output/xml
     ${CMAKE_SOURCE_DIR}/output/resources
     ${CMAKE_SOURCE_DIR}/output/plugins
     DESTINATION ${INSTALL_SHARE_DIR}
 )
-
