@@ -16,6 +16,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+      with:
+        submodules: true
 
     - name: Install Tools
       run: sudo apt install build-essential libwxgtk3.0-gtk3-dev libwxgtk-media3.0-gtk3-dev cmake
