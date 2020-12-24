@@ -9,14 +9,26 @@ function(add_plugin plugin_name srcs)
             wxfb-plugin-interface
     )
 
-    if(MSYS)
+    target_compile_definitions(${plugin_name}
+        PRIVATE
+            BUILD_DLL
+            TIXML_USE_TICPP
+    )
+
+    # Always use the unix style "lib" prefix
+    set_target_properties(${plugin_name} 
+        PROPERTIES
+            PREFIX lib
+    )
+
+    if(WIN32)
         install(FILES
-            ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_SHARED_LIBRARY_PREFIX}${plugin_name}${CMAKE_SHARED_LIBRARY_SUFFIX}
+            $<TARGET_FILE:${plugin_name}>
             DESTINATION ${INSTALL_LIB_DIR}/plugins/${plugin_name}/
         )
-    elseif(UNIX)
+    elseif(UNIX OR MAC)
         install(FILES
-            ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_SHARED_LIBRARY_PREFIX}${plugin_name}${CMAKE_SHARED_LIBRARY_SUFFIX}
+            $<TARGET_FILE:${plugin_name}>
             DESTINATION ${INSTALL_LIB_DIR}
         )
     endif()

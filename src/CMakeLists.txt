@@ -75,7 +75,8 @@ if(MSYS)
 endif()
 
 target_include_directories(wxFormBuilder
-    PRIVATE 
+    PRIVATE
+        ${wxWidgets_INCLUDE_DIRS}
         ${CMAKE_CURRENT_SOURCE_DIR}
         $<$<BOOL:${MSYS}>:${BINUTILS_BASE_INCLUDE_DIR}/binutils> # TODO check PLATFORM_ID on MSYS
 )
