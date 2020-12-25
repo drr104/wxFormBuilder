@@ -1,0 +1,21 @@
+name: Windows (CMake)
+
+on: [workflow_dispatch]
+
+env:
+  BUILD_TYPE: Release
+
+jobs:
+  build:
+    runs-on: windows-2019
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        submodules: true
+
+    - name: Install Tools
+      run: choco install cmake -y --version=3.19.2 --installargs 'ADD_CMAKE_TO_PATH=System'
+
+    - name: Build
+      run: cmake --version
