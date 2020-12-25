@@ -5,7 +5,7 @@ wxfb_add_library(wxfb-plugin-interface STATIC
 
 target_link_libraries(wxfb-plugin-interface
     PUBLIC
-        ${wxWidgets_LIBRARIES} 
+        ${wxWidgets_LIBRARIES}
         ticpp
 )
 

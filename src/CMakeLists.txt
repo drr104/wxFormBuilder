@@ -75,7 +75,8 @@ if(MSYS)
 endif()
 
 target_include_directories(wxFormBuilder
-    PRIVATE 
+    PRIVATE
+        ${wxWidgets_INCLUDE_DIRS}
         ${CMAKE_CURRENT_SOURCE_DIR}
         $<$<BOOL:${MSYS}>:${BINUTILS_BASE_INCLUDE_DIR}/binutils> # TODO check PLATFORM_ID on MSYS
 )
@@ -86,7 +87,7 @@ target_link_libraries(wxFormBuilder
         ticpp
         wxfb-plugin-interface
         "$<$<PLATFORM_ID:Windows>:psapi;imagehlp>"
-        "$<$<BOOL:${MSYS}>:${msys_includes}>"
+        "$<$<BOOL:${MSYS}>:${msys_libs}>"
 )
 
 if(MSYS)

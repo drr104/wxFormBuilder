@@ -31,7 +31,7 @@ include(CPack)
 
 set(INSTALL_ROOT_DIR "cmake_install")
 
-if(MSYS)
+if(WIN32)
     set(INSTALL_BIN_DIR ".")
     set(INSTALL_SHARE_DIR ".")
     set(INSTALL_LIB_DIR ".")
@@ -42,13 +42,16 @@ elseif(UNIX)
 endif()
 
 set(CMAKE_INSTALL_PREFIX ${CMAKE_SOURCE_DIR}/${INSTALL_ROOT_DIR})
-
 set(CMAKE_INSTALL_SYSTEM_RUNTIME_DESTINATION ${INSTALL_BIN_DIR})
 
 function(_add_target_common target)
     target_compile_definitions(${target} 
         PRIVATE 
-        $<$<CONFIG:Debug>:__WXFB_DEBUG__>)
+            $<$<CONFIG:Debug>:__WXFB_DEBUG__>)
+
+    target_compile_options(${target}
+        PRIVATE
+            $<$<CXX_COMPILER_ID:MSVC>:/MP>)
 endfunction()
 
 function(wxfb_add_executable target)
