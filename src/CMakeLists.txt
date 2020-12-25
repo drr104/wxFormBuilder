@@ -87,7 +87,7 @@ target_link_libraries(wxFormBuilder
         ticpp
         wxfb-plugin-interface
         "$<$<PLATFORM_ID:Windows>:psapi;imagehlp>"
-        "$<$<BOOL:${MSYS}>:${msys_includes}>"
+        "$<$<BOOL:${MSYS}>:${msys_libs}>"
 )
 
 if(MSYS)
