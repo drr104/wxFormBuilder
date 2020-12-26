@@ -15,7 +15,17 @@ jobs:
         submodules: true
 
     - name: Install Tools
-      run: choco install cmake -y --version=3.19.2 --installargs 'ADD_CMAKE_TO_PATH=System'
+      shell: cmd
+      run: choco install cmake -y --no-progress --version=3.19.2 --installargs 'ADD_CMAKE_TO_PATH=System'
+
+    - name: Create Build Environment
+      shell: cmd
+      run: cmake -E make_directory ./build/cmake
+
+    - name: Configure CMake
+      shell: cmd
+      run: cmake -S . -B ./build/cmake -DCMAKE_BUILD_TYPE=$BUILD_TYPE
 
     - name: Build
-      run: cmake --version
+      shell: cmd
+      run: cmake --build build/cmake --parallel --config $BUILD_TYPE
