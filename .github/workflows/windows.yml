@@ -16,8 +16,9 @@ jobs:
 
     - name: Install Tools
       shell: cmd
-      run: choco install cmake -y --no-progress --version=3.19.2 --installargs 'ADD_CMAKE_TO_PATH=System'
-      run: vcpkg install wxwidgets
+      run: |
+        choco install cmake -y --no-progress --version=3.19.2 --installargs 'ADD_CMAKE_TO_PATH=System'
+        vcpkg install wxwidgets
 
     - name: Create Build Environment
       shell: cmd
