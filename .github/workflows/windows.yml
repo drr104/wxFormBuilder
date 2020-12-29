@@ -38,7 +38,7 @@ jobs:
 
     - name: Configure CMake
       shell: cmd
-      run: cmake -S ./wxfb/ -B ./wxfb/build/cmake -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DwxWidgets_ROOT_DIR:PATH=./wx/ -DwxWidgets_LIB_DIR:PATH=./wx/lib/vc14x_x64_dll/ -DwxWidgets_USE_REL_AND_DBG:BOOL=OFF -DwxWidgets_CONFIGURATION:STRING=mswu
+      run: cmake -S ./wxfb/ -B ./wxfb/build/cmake -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DwxWidgets_ROOT_DIR:PATH=%GITHUB_WORKSPACE%/wx/ -DwxWidgets_LIB_DIR:PATH=%GITHUB_WORKSPACE%/wx/lib/vc14x_x64_dll/ -DwxWidgets_USE_REL_AND_DBG:BOOL=OFF -DwxWidgets_CONFIGURATION:STRING=mswu
 
     - name: Build
       shell: cmd
