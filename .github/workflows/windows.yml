@@ -18,7 +18,13 @@ jobs:
       shell: cmd
       run: |
         choco install cmake -y --no-progress --version=3.19.2 --installargs 'ADD_CMAKE_TO_PATH=System'
-        vcpkg install wxwidgets
+
+    - name: Download wxWidgets
+      shell: cmd
+      run: |
+        curl -L --output wxdev.7z https://github.com/wxWidgets/wxWidgets/releases/download/v3.1.4/wxMSW-3.1.4_vc14x_x64_Dev.7z
+        curl -L --output wxheaders.7z https://github.com/wxWidgets/wxWidgets/releases/download/v3.1.4/wxWidgets-3.1.4-headers.7z
+        curl -L --output wxrelease.7z https://github.com/wxWidgets/wxWidgets/releases/download/v3.1.4/wxMSW-3.1.4_vc14x_x64_ReleaseDLL.7z
 
     - name: Create Build Environment
       shell: cmd
