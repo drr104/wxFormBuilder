@@ -13,6 +13,7 @@ jobs:
     - uses: actions/checkout@v2
       with:
         submodules: true
+        path: wxfb
 
     - name: Install Tools
       shell: cmd
@@ -23,17 +24,20 @@ jobs:
       shell: cmd
       run: |
         curl -L --output wxdev.7z https://github.com/wxWidgets/wxWidgets/releases/download/v3.1.4/wxMSW-3.1.4_vc14x_x64_Dev.7z
+        7z x wxdev.7z -o./wx/
         curl -L --output wxheaders.7z https://github.com/wxWidgets/wxWidgets/releases/download/v3.1.4/wxWidgets-3.1.4-headers.7z
+        7z x wxheaders.7z -o./wx/
         curl -L --output wxrelease.7z https://github.com/wxWidgets/wxWidgets/releases/download/v3.1.4/wxMSW-3.1.4_vc14x_x64_ReleaseDLL.7z
+        7z x wxrelease.7z -o./wx/
 
     - name: Create Build Environment
       shell: cmd
-      run: cmake -E make_directory ./build/cmake
+      run: cmake -E make_directory ./wxfb/build/cmake
 
     - name: Configure CMake
       shell: cmd
-      run: cmake -S . -B ./build/cmake -DCMAKE_BUILD_TYPE=$BUILD_TYPE
+      run: cmake -S ./wxfb/ -B ./wxfb/build/cmake -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DwxWidgets_ROOT_DIR:PATH=./wx/ -DwxWidgets_LIB_DIR:PATH=./wx/lib/vc14x_x64_dll/ -DwxWidgets_USE_REL_AND_DBG:BOOL=OFF -DwxWidgets_CONFIGURATION:STRING=mswu
 
     - name: Build
       shell: cmd
-      run: cmake --build build/cmake --parallel --config $BUILD_TYPE
+      run: cmake --build wxfb/build/cmake --parallel --config $BUILD_TYPE
