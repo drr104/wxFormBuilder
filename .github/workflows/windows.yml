@@ -29,8 +29,6 @@ jobs:
         7z x wxheaders.7z -o./wx/
         curl -L --output wxrelease.7z https://github.com/wxWidgets/wxWidgets/releases/download/v3.1.4/wxMSW-3.1.4_vc14x_x64_ReleaseDLL.7z
         7z x wxrelease.7z -o./wx/
-        pwd
-        dir
 
     - name: Create Build Environment
       shell: cmd
@@ -42,4 +40,4 @@ jobs:
 
     - name: Build
       shell: cmd
-      run: cmake --build wxfb/build/cmake --parallel --config $BUILD_TYPE
+      run: cmake --build wxfb/build/cmake --parallel --config %BUILD_TYPE%
