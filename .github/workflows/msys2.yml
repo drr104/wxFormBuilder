@@ -10,8 +10,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-        submodules: true
-        path: wxfb
+          submodules: true
+          path: wxfb
       - uses: msys2/setup-msys2@v2
         with:
           msystem: MINGW64
