@@ -1,0 +1,22 @@
+name: Windows (MSYS2/CMake)
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: windows-2019
+    defaults:
+      run:
+        shell: msys2 {0}
+    steps:
+      - uses: actions/checkout@v2
+        with:
+        submodules: true
+        path: wxfb
+      - uses: msys2/setup-msys2@v2
+        with:
+          msystem: MINGW64
+          install: git mingw-w64-x86_64-cmake mingw-w64-x86_64-wxmsw3.1 mingw-w64-x86_64-gcc mingw-w64-x86_64-wxWidgets make
+      - name: Configure CMake
+        run: cmake.exe -G 'MSYS Makefiles' -S ./wxfb/ -B ./wxfb/build/cmake
+      - name: Build
+        run: cmake.exe --build build/cmake
